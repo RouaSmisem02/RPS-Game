@@ -17,122 +17,117 @@ namespace RPS_Game
 
         public void PlayGame()
         {
-            int rounds = 0;
-            while (rounds < 3)
+            bool continuePlaying = true;
+
+            while (continuePlaying)
             {
-                try
+                int rounds = 0;
+                while (rounds < 3)
                 {
-                    string humanMove = humanPlayer.ChooseMove();
-                    string aiMove = GetAIMove();
-                    Console.WriteLine($"{aiPlayer.Name} chose {aiMove}");
-                    DetermineWinner(humanMove, aiMove);
-                    rounds++;
-                    DisplayScores();
+                    try
+                    {
+                        string humanMove = humanPlayer.ChooseMove();
+                        string aiMove = GetAIMove();
+                        Console.WriteLine($"{aiPlayer.Name} chose {aiMove}");
+                        DetermineWinner(humanMove, aiMove);
+                        rounds++;
+                        DisplayScores();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"An error occurred during the game: {ex.Message}");
+                    }
                 }
-                catch (Exception ex)
+
+                DeclareWinner(); // Call to declare the winner after 3 rounds
+
+                // Ask user if they want to continue playing
+                Console.Write("Do you want to play another game? (yes/no): ");
+                string playAgainResponse = Console.ReadLine().ToLower();
+
+                if (playAgainResponse != "yes")
                 {
-                    Console.WriteLine($"An error occurred during the game: {ex.Message}");
+                    continuePlaying = false;
+                }
+                else
+                {
+                    // Reset scores for a new game
+                    humanPlayer.Score = 0;
+                    aiPlayer.Score = 0;
+                    Console.WriteLine("\nStarting a new game!\n");
                 }
             }
-            DeclareWinner(); // Call to declare the winner after 3 rounds
+
+            Console.WriteLine("Thank you for playing!");
         }
 
         private string GetAIMove()
         {
-            try
-            {
-                string[] moves = { "rock", "paper", "scissors" };
-                int index = random.Next(moves.Length);
-                return moves[index];
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred while generating AI move: {ex.Message}");
-                return "rock";
-            }
+            string[] moves = { "rock", "paper", "scissors" };
+            int index = random.Next(moves.Length);
+            return moves[index];
         }
 
         public void DetermineWinner(string humanMove, string aiMove)
         {
-            try
+            if (humanMove == aiMove)
             {
-                if (humanMove == aiMove)
-                {
-                    Console.WriteLine("It's a tie!");
-                }
-                else if ((humanMove == "rock" && aiMove == "scissors") ||
-                         (humanMove == "paper" && aiMove == "rock") ||
-                         (humanMove == "scissors" && aiMove == "paper"))
-                {
-                    Console.WriteLine($"{humanPlayer.Name} wins this round!");
-                    humanPlayer.Score++;
-                }
-                else
-                {
-                    Console.WriteLine($"{aiPlayer.Name} wins this round!");
-                    aiPlayer.Score++;
-                }
+                Console.WriteLine("It's a tie!");
             }
-            catch (Exception ex)
+            else if ((humanMove == "rock" && aiMove == "scissors") ||
+                     (humanMove == "paper" && aiMove == "rock") ||
+                     (humanMove == "scissors" && aiMove == "paper"))
             {
-                Console.WriteLine($"An error occurred while determining the winner: {ex.Message}");
+                Console.WriteLine($"{humanPlayer.Name} wins this round!");
+                humanPlayer.Score++;
+            }
+            else
+            {
+                Console.WriteLine($"{aiPlayer.Name} wins this round!");
+                aiPlayer.Score++;
             }
         }
 
         private void DisplayScores()
         {
-            try
-            {
-                Console.WriteLine($"{humanPlayer.Name}: {humanPlayer.Score} - {aiPlayer.Name}: {aiPlayer.Score}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred while displaying scores: {ex.Message}");
-            }
+            Console.WriteLine($"{humanPlayer.Name}: {humanPlayer.Score} - {aiPlayer.Name}: {aiPlayer.Score}");
         }
 
         private void DeclareWinner()
         {
-            try
+            if (humanPlayer.Score > aiPlayer.Score)
             {
-                if (humanPlayer.Score > aiPlayer.Score)
-                {
-                    Console.WriteLine($"{humanPlayer.Name} wins the game!");
-                    Console.WriteLine($@"
-                           ___________
-                          '._==_==_=_.'
-                          .-\:      /-.
-                         | (|:.     |) |
-                          '-|:.     |-'
-                            \::.    /
-                             '::. .'
-                               ) (
-                             _.' '._
-                            `""{humanPlayer.Name}""`");
-                }
-                else if (aiPlayer.Score > humanPlayer.Score)
-                {
-                    Console.WriteLine($"{aiPlayer.Name} wins the game!");
-                    Console.WriteLine(@"
-                           ___________
-                          '._==_==_=_.'
-                          .-\:      /-.
-                         | (|:.     |) |
-                          '-|:.     |-'
-                            \::.    /
-                             '::. .'
-                               ) (
-                             _.' '._
-                            `""""""""""`");
-                                    }
-                else
-                {
-                    Console.WriteLine("The game is a tie!");
-                }
+                Console.WriteLine($"{humanPlayer.Name} wins the game!");
+                Console.WriteLine($@"
+                   ___________
+                  '._==_==_=_.'
+                  .-\:      /-.
+                 | (|:.     |) |
+                  '-|:.     |-'
+                    \::.    /
+                     '::. .'
+                       ) (
+                     _.' '._
+                    `""{humanPlayer.Name}""`");
             }
-            catch (Exception ex)
+            else if (aiPlayer.Score > humanPlayer.Score)
             {
-                Console.WriteLine($"An error occurred while declaring the winner: {ex.Message}");
+                Console.WriteLine($"{aiPlayer.Name} wins the game!");
+                Console.WriteLine($@"
+                   ___________
+                  '._==_==_=_.'
+                  .-\:      /-.
+                 | (|:.     |) |
+                  '-|:.     |-'
+                    \::.    /
+                     '::. .'
+                       ) (
+                     _.' '._
+                    `""""""""""`");
+            }
+            else
+            {
+                Console.WriteLine("The game is a tie!");
             }
         }
     }
