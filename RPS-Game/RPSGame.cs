@@ -34,7 +34,7 @@ namespace RPS_Game
                     Console.WriteLine($"An error occurred during the game: {ex.Message}");
                 }
             }
-            DeclareWinner();
+            DeclareWinner(); // Call to declare the winner after 3 rounds
         }
 
         private string GetAIMove()
@@ -48,7 +48,7 @@ namespace RPS_Game
             catch (Exception ex)
             {
                 Console.WriteLine($"An error occurred while generating AI move: {ex.Message}");
-                return "rock"; 
+                return "rock";
             }
         }
 
@@ -98,11 +98,33 @@ namespace RPS_Game
                 if (humanPlayer.Score > aiPlayer.Score)
                 {
                     Console.WriteLine($"{humanPlayer.Name} wins the game!");
+                    Console.WriteLine($@"
+                           ___________
+                          '._==_==_=_.'
+                          .-\:      /-.
+                         | (|:.     |) |
+                          '-|:.     |-'
+                            \::.    /
+                             '::. .'
+                               ) (
+                             _.' '._
+                            `""{humanPlayer.Name}""`");
                 }
                 else if (aiPlayer.Score > humanPlayer.Score)
                 {
                     Console.WriteLine($"{aiPlayer.Name} wins the game!");
-                }
+                    Console.WriteLine(@"
+                           ___________
+                          '._==_==_=_.'
+                          .-\:      /-.
+                         | (|:.     |) |
+                          '-|:.     |-'
+                            \::.    /
+                             '::. .'
+                               ) (
+                             _.' '._
+                            `""""""""""`");
+                                    }
                 else
                 {
                     Console.WriteLine("The game is a tie!");
